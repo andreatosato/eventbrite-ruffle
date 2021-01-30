@@ -1,0 +1,136 @@
+﻿@using Eventbrite.Ruffle.Models;
+@using Eventbrite.Ruffle.Configs;
+@using Microsoft.Extensions.Options;
+@using System.Collections.Generic;
+@page "/"
+
+<Loading IsLoading="IsLoading"></Loading>
+<div hidden="@IsLoading">
+    <h2>Genera premi</h2>
+    <EditForm Model="WinnerForm" OnValidSubmit="async() => await GenerateWinner()" class="row g-5">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="col-auto">
+            <InputText type="password" id="eventId" @bind-Value="WinnerForm.EventId" class="form-control"></InputText>
+        </div>
+        <div class="col-auto">
+            <InputNumber TValue="int" id="generateNumber" @bind-Value="WinnerForm.GenerateNumbers" class="form-control"></InputNumber>
+        </div>
+        <div class="col-auto">
+            <InputText id="ruffleName" @bind-Value="WinnerForm.RuffleName" class="form-control" placeholder="Nome premio"></InputText>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Genera</button>
+        </div>
+    </EditForm>
+
+    <div class="row">
+        <div class="col-auto">
+            <button class="btn btn-danger mb-3" @onclick="() => ClearEvent(double.Parse(WinnerForm.EventId))">Cancella vincitori evento</button>
+        </div>
+    </div>
+
+    <br />
+    <h2>Vincitori</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Nome premio</th>
+                <th scope="col">Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var w in Winners.Select((Attendee, i) => new { i, Attendee }))
+            {
+                <tr>
+                    <td>@(w.Attendee.Incremental)</td>
+                    <td>@(w.Attendee.Name)</td>
+                    <td>@(w.Attendee.RuffleName)</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => DeleteWinner(w.Attendee)">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code{
+    [Inject]
+    public IOptions<EventbriteConfig> Config { get; set; }
+    [Inject]
+    public Services.EventbriteService eventbriteService { get; set; }
+
+    bool IsLoading { get; set; } = false;
+    IList<AttendeeWinner> Winners { get; set; } = new List<AttendeeWinner>();
+    public WinnerFormRequest WinnerForm { get; set; } = new WinnerFormRequest();
+
+    protected override void OnInitialized()
+    {
+        if (Config.Value?.EventId > 0)
+        {
+            WinnerForm.EventId = Config.Value.EventId.ToString();
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var eventId = double.Parse(WinnerForm.EventId);
+            if (eventId > 0)
+            {
+                Winners = eventbriteService.GetWinners(eventId);
+                StateHasChanged();
+            }
+        }
+    }
+
+    public async Task GenerateWinner()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        await InvokeAsync(() =>
+        {
+            for (int i = 0; i < WinnerForm.GenerateNumbers; i++)
+            {
+                eventbriteService.RandomizeAttendeeAndSave(double.Parse(WinnerForm.EventId), WinnerForm.RuffleName);
+                Winners = eventbriteService.GetWinners(double.Parse(WinnerForm.EventId));
+            }
+        });
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+    public void DeleteWinner(AttendeeWinner winner)
+    {
+        eventbriteService.DeleteWinner(winner.Id);
+        Winners.Remove(winner);
+        StateHasChanged();
+    }
+
+    public void ClearEvent(double eventId)
+    {
+        eventbriteService.ClearEvent(eventId);
+        var winnerToDelete = Winners.Where(t => t.EventId == eventId);
+        for (int i = winnerToDelete.Count() - 1; i >= 0; i--)
+        {
+            Winners.Remove(winnerToDelete.ElementAt(i));
+        }
+        StateHasChanged();
+    }
+
+    public class WinnerFormRequest
+    {
+        [System.ComponentModel.DataAnnotations.Range(1, 1000)]
+        public int GenerateNumbers { get; set; } = 0;
+        [System.ComponentModel.DataAnnotations.StringLength(200, MinimumLength = 2)]
+        public string RuffleName { get; set; } = "";
+        [System.ComponentModel.DataAnnotations.Required]
+        public string EventId { get; set; }
+    }
+}
