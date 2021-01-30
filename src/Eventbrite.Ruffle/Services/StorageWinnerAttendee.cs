@@ -24,7 +24,11 @@ namespace Eventbrite.Ruffle.Services
         {
             var db = Database.Value;
             var col = db.GetCollection<AttendeeWinner>(options.CollectionName);
-            attendeeWinner.Incremental = col.Count();
+            if(col.Count() > 0)
+                attendeeWinner.Incremental = col.Max(t => t.Incremental) + 1;
+            else
+                attendeeWinner.Incremental = 1;
+
             col.Insert(attendeeWinner);
             col.EnsureIndex(x => x.Id);
             db.Checkpoint();
