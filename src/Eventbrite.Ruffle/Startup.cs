@@ -28,9 +28,9 @@ namespace Eventbrite.Ruffle
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddCircuitOptions(opt => opt.DetailedErrors = true);
             services.AddTransient<EventbriteService>();
-            services.AddTransient<IStorageWinner, StorageWinnerAttendee>();
+            services.AddScoped<IStorageWinner, StorageWinnerAttendee>();
             services.Configure<EventbriteConfig>(Configuration.GetSection("EventBrite"));
             services.Configure<StorageConfig>(Configuration.GetSection("Storage"));
 

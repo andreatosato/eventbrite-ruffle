@@ -6,3 +6,6 @@
 /src/Eventbrite.Ruffle/.vs/Eventbrite.Ruffle
 /src/Eventbrite.Ruffle/bin/Debug/net5.0
 /src/Eventbrite.Ruffle/obj
+/src/Eventbrite.Ruffle/bin/Release/net5.0
+/src/Eventbrite.Ruffle/Properties
+/src/Eventbrite.Ruffle/Eventbrite.Ruffle.csproj.user
