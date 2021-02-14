@@ -9,3 +9,5 @@
 /src/Eventbrite.Ruffle/bin/Release/net5.0
 /src/Eventbrite.Ruffle/Properties
 /src/Eventbrite.Ruffle/Eventbrite.Ruffle.csproj.user
+/src/SendLicense/bin/Debug
+/src/SendLicense/obj

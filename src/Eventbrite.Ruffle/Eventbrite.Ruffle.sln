@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventbrite.Ruffle", "Eventbrite.Ruffle.csproj", "{284FAA06-41BB-4B41-BCFA-F33F1996A7DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventbrite.Ruffle", "Eventbrite.Ruffle.csproj", "{284FAA06-41BB-4B41-BCFA-F33F1996A7DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendLicense", "..\SendLicense\SendLicense.csproj", "{655D0A7C-69DA-4345-823E-4783B11E124F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{284FAA06-41BB-4B41-BCFA-F33F1996A7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{284FAA06-41BB-4B41-BCFA-F33F1996A7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{284FAA06-41BB-4B41-BCFA-F33F1996A7DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{655D0A7C-69DA-4345-823E-4783B11E124F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{655D0A7C-69DA-4345-823E-4783B11E124F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{655D0A7C-69DA-4345-823E-4783B11E124F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{655D0A7C-69DA-4345-823E-4783B11E124F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
