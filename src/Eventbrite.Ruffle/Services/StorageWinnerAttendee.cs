@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eventbrite.Ruffle.Services
 {
-    public class StorageWinnerAttendee : IStorageWinner, IDisposable
+    public class StorageWinnerAttendee : IStorageWinner
     {
         private readonly StorageConfig options;
         private Lazy<LiteDatabase> Database { get; set; }
@@ -59,6 +59,7 @@ namespace Eventbrite.Ruffle.Services
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             Database.Value.Dispose();
         }
     }

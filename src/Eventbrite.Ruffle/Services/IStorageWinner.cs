@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eventbrite.Ruffle.Services
 {
-    public interface IStorageWinner
+    public interface IStorageWinner : IDisposable
     {
         void InsertWinner(AttendeeWinner attendeeWinner);
         IEnumerable<AttendeeWinner> GetWinners(double eventId);
